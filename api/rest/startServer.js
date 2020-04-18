@@ -1,8 +1,8 @@
-import express from 'express';
-import http from 'http';
+const express = require('express');
+const http = require('http');
 
-import router from './router';
-import logger from '../../utils/logger';
+const router = require('./router');
+const logger = require('../../utils/logger');
 
 const startServer = port => {
   const app = express();
@@ -18,4 +18,4 @@ const startServer = port => {
   return http.Server(app);
 };
 
-export default startServer;
+module.exports = startServer;

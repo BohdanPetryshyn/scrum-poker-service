@@ -1,9 +1,9 @@
-import { Router } from 'express';
+const { Router } = require('express');
 
-import { getCardSchemas } from '../../controllers/cardSchemas';
+const { getCardSchemas } = require('../../controllers/cardSchemas');
 
 const cardSchemasRouter = Router();
 
 cardSchemasRouter.get('/', getCardSchemas);
 
-export default cardSchemasRouter;
+module.exports = cardSchemasRouter;

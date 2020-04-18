@@ -1,4 +1,4 @@
-import io from 'socket.io';
+const io = require('socket.io');
 
 const createSessionHandler = require('./createSessionHandler');
 
@@ -10,4 +10,4 @@ const attachToServer = httpServer => {
   });
 };
 
-export default attachToServer;
+module.exports = attachToServer;

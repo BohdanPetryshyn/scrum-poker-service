@@ -1,6 +1,6 @@
-import startRestServer from './api/rest/startServer';
-import attachSocketListenerToServer from './api/socket/attachToServer';
-import { SERVER_PORT } from './utils/config/server';
+const startRestServer = require('./api/rest/startServer');
+const attachSocketListenerToServer = require('./api/socket/attachToServer');
+const { SERVER_PORT } = require('./utils/config/server');
 
 const httpServer = startRestServer(SERVER_PORT);
 attachSocketListenerToServer(httpServer);

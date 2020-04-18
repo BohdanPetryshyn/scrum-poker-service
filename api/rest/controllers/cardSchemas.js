@@ -1,5 +1,5 @@
-import { CARD_SCHEMAS } from '../../../utils/config/cardSchemas';
+const { CARD_SCHEMAS } = require('../../../utils/config/cardSchemas');
 
-export const getCardSchemas = (req, res) => {
+exports.getCardSchemas = (req, res) => {
   res.status(200).json(CARD_SCHEMAS);
 };
