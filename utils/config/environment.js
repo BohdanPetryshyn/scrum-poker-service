@@ -1,0 +1,3 @@
+exports.SERVER_PORT = process.env.SERVER_PORT || 8080;
+
+exports.MONGO_DB_CONNECTION_STRING = process.env.MONGO_DB_CONNECTION_STRING;
