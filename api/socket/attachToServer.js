@@ -1,4 +1,5 @@
 const io = require('socket.io');
+const logger = require('../../utils/logger');
 
 const createSessionHandler = require('./createSessionHandler');
 
@@ -7,6 +8,8 @@ const attachToServer = httpServer => {
 
   socketServer.on('connection', socket => {
     socket.on('createSession', createSessionHandler);
+
+    logger.info('New connection.');
   });
 };
 
