@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const cardSchemasConfig = require('../../utils/config/cardSchemas');
+const { CARD_SCHEMA_NAMES } = require('../../utils/config/cardSchemas');
 
 const PokerSessionSchema = mongoose.Schema({
   topic: {
@@ -11,7 +11,7 @@ const PokerSessionSchema = mongoose.Schema({
   },
   cardSchema: {
     type: String,
-    enum: cardSchemasConfig.CARD_SCHEMAS,
+    enum: CARD_SCHEMA_NAMES,
     required: true,
   },
 });
