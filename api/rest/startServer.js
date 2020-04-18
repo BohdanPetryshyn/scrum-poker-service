@@ -1,15 +1,21 @@
 import express from 'express';
+import http from 'http';
 
 import router from './router';
-import { SERVER_PORT } from '../../utils/config/server';
 import logger from '../../utils/logger';
 
-const app = express();
+const startServer = port => {
+  const app = express();
 
-app.use(express.json());
+  app.use(express.json());
 
-app.use('/', router);
+  app.use('/', router);
 
-app.listen(SERVER_PORT, () => {
-  logger.info(`server listening on port ${SERVER_PORT}`);
-});
+  app.listen(port, () => {
+    logger.info(`server listening on port ${port}`);
+  });
+
+  return http.Server(app);
+};
+
+export default startServer;
