@@ -9,7 +9,7 @@ const startServer = port => {
 
   app.use(express.json());
 
-  app.use('/', router);
+  app.use('/api', router);
 
   app.listen(port, () => {
     logger.info(`server listening on port ${port}`);
