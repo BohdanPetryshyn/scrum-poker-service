@@ -1,0 +1,26 @@
+{
+  "name": "scrum-poker-service",
+  "version": "1.0.0",
+  "description": "The service for scrum poker application.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BohdanPetryshyn/scrum-poker-service.git"
+  },
+  "keywords": [
+    "Node",
+    "Socket.io",
+    "Mongo",
+    "scrum",
+    "poker"
+  ],
+  "author": "BohdanPetryshyn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BohdanPetryshyn/scrum-poker-service/issues"
+  },
+  "homepage": "https://github.com/BohdanPetryshyn/scrum-poker-service#readme"
+}
