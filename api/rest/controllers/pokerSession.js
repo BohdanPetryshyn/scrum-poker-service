@@ -1,4 +1,5 @@
 const PokerSession = require('../../../data/models/PokerSession');
+const { getCardSchema } = require('../../../utils/config/cardSchemas');
 const logger = require('../../../utils/logger');
 
 exports.createPokerSession = async (req, res) => {
@@ -8,5 +9,9 @@ exports.createPokerSession = async (req, res) => {
 
   logger.info(`Poker session ${savedPokerSession} created.`);
 
-  res.status(200).json(savedPokerSession);
+  res.status(200).json({
+    sessionId: savedPokerSession['_id'],
+    topic: savedPokerSession.topic,
+    cardSchema: getCardSchema(savedPokerSession.cardSchema),
+  });
 };
