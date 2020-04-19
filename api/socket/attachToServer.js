@@ -9,7 +9,7 @@ const attachToServer = httpServer => {
   socketServer.on('connection', socket => {
     socket.on('createSession', createSessionHandler);
 
-    logger.info('New connection.');
+    logger.info('New socket connection.');
   });
 };
 
