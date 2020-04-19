@@ -11,11 +11,11 @@ const startServer = port => {
 
   app.use('/api', router);
 
-  app.listen(port, () => {
+  const server = http.Server(app);
+
+  return server.listen({ port }, () => {
     logger.info(`server listening on port ${port}`);
   });
-
-  return http.Server(app);
 };
 
 module.exports = startServer;
