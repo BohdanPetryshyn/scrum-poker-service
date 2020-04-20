@@ -1,8 +1,9 @@
 const PokerSession = require('../../../data/models/PokerSession');
 const { getCardSchema } = require('../../../utils/config/cardSchemas');
 const logger = require('../../../utils/logger');
+const propagateErrors = require('../utils/propagateErrors');
 
-exports.createPokerSession = async (req, res) => {
+exports.createPokerSession = propagateErrors(async (req, res) => {
   const { topic, cardSchema } = req.body;
 
   const savedPokerSession = await PokerSession.create({ topic, cardSchema });
