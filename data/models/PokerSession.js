@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const { CARD_SCHEMA_NAMES } = require('../../utils/config/cardSchemas');
 
+const SESSION_STAGES = {
+  WAITING: 'WAITING',
+  VOTING: 'VOTING',
+  RESULT: 'RESULT',
+};
+
 const PokerSessionSchema = mongoose.Schema({
   topic: {
     type: String,
@@ -14,6 +20,16 @@ const PokerSessionSchema = mongoose.Schema({
     enum: CARD_SCHEMA_NAMES,
     required: true,
   },
+  stage: {
+    type: String,
+    enum: [
+      SESSION_STAGES.WAITING,
+      SESSION_STAGES.VOTING,
+      SESSION_STAGES.RESULT,
+    ],
+    default: SESSION_STAGES.WAITING,
+  },
 });
 
 module.exports = mongoose.model('PokerSession', PokerSessionSchema);
+module.exports.SESSION_STAGES = SESSION_STAGES;

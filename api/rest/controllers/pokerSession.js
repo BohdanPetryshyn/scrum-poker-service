@@ -13,5 +13,6 @@ exports.createPokerSession = async (req, res) => {
     sessionId: savedPokerSession['_id'],
     topic: savedPokerSession.topic,
     cardSchema: getCardSchema(savedPokerSession.cardSchema),
+    stage: savedPokerSession.stage,
   });
 };
