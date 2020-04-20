@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const cardSchemaRouter = require('./cardSchemas');
+const cardSchemaRouter = require('./cardSchema');
 const pokerSessionRouter = require('./pokerSession');
 
 const v1Router = Router();
