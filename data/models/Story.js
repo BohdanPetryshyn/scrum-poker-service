@@ -20,4 +20,4 @@ const StorySchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Schema', StorySchema);
+module.exports = mongoose.model('Story', StorySchema);
