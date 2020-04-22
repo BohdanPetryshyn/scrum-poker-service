@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const StorySchema = mongoose.Schema({
-  name: {
+  summary: {
     type: String,
     required: true,
     trim: true,

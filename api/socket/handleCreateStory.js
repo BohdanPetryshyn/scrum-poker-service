@@ -9,7 +9,9 @@ const getVotingFinishTime = () =>
 
 const handleCreateStory = ({ serverSocket, sessionId }) => story => {
   Story.create({ ...story, pokerSession: sessionId }).then(
-    logger.info(`Story "${story.name}" created in poker session ${sessionId}.`)
+    logger.info(
+      `Story "${story.summary}" created in poker session ${sessionId}.`
+    )
   );
 
   const votingFinishTime = getVotingFinishTime();
