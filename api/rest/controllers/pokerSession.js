@@ -9,6 +9,8 @@ const toPokerSessionResponse = pokerSession => ({
   topic: pokerSession.topic,
   stage: pokerSession.stage,
   cardSchema: getCardSchema(pokerSession.cardSchema),
+  votingFinishTime:
+    pokerSession.votingFinishTime && pokerSession.votingFinishTime.getTime(),
 });
 
 exports.createPokerSession = propagateErrors(async (req, res) => {

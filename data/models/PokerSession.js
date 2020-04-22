@@ -29,6 +29,7 @@ const PokerSessionSchema = mongoose.Schema({
     ],
     default: SESSION_STAGES.WAITING,
   },
+  votingFinishTime: Date,
 });
 
 module.exports = mongoose.model('PokerSession', PokerSessionSchema);
