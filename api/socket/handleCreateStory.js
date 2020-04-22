@@ -7,7 +7,7 @@ const logger = require('../../utils/logger');
 const getVotingFinishTime = () =>
   new Date(Date.now() + Number(VOTING_DURATION));
 
-const handleCreateStory = ({ socket, sessionId }) => story => {
+const handleCreateStory = ({ serverSocket, sessionId }) => story => {
   Story.create({ ...story, pokerSession: sessionId }).then(
     logger.info(`Story "${story.name}" created in poker session ${sessionId}.`)
   );
@@ -18,7 +18,10 @@ const handleCreateStory = ({ socket, sessionId }) => story => {
     votingFinishTime,
   }).then(() => logger.info(`Session ${sessionId} is in VOTING stage now.`));
 
-  socket.to(sessionId).emit('STORY_CREATED', { story, votingFinishTime });
+  serverSocket.to(sessionId).emit('STORY_CREATED', {
+    votingFinishTime: votingFinishTime.getTime(),
+    story,
+  });
 };
 
 module.exports = handleCreateStory;

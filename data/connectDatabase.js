@@ -8,6 +8,7 @@ module.exports = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   });
 
   logger.info(`MongoDB connected at host=${connection.connection.host}`);
