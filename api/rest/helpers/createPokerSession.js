@@ -10,14 +10,20 @@ const createPokerSession = async (topic, cardSchema, hostUsername) => {
     const participant = await new Participant({
       username: hostUsername,
     }).save({ session });
+
     const pokerSession = await new PokerSession({
       topic,
       cardSchema,
       host: participant['_id'],
     }).save({ session });
+
+    participant.pokerSession = pokerSession['_id'];
+    participant.save({ session });
+
     logger.info(
       `Poker session ${pokerSession} created by user ${hostUsername}.`
     );
+
     savedPokerSession = await pokerSession.populate('host').execPopulate();
 
     return pokerSession;
