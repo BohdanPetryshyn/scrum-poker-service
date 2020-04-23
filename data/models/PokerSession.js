@@ -37,6 +37,13 @@ const PokerSessionSchema = mongoose.Schema({
   },
 });
 
+PokerSessionSchema.virtual('participants', {
+  ref: 'Participant',
+  localField: '_id',
+  foreignField: 'pokerSession',
+  justOne: false,
+});
+
 const PokerSessionModel = mongoose.model('PokerSession', PokerSessionSchema);
 PokerSessionModel.createCollection();
 module.exports = PokerSessionModel;

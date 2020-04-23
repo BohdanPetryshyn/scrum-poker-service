@@ -7,6 +7,9 @@ const toPokerSessionResponse = pokerSession => ({
   stage: pokerSession.stage,
   cardSchema: getCardSchema(pokerSession.cardSchema),
   host: toParticipantResponse(pokerSession.host),
+  participants:
+    pokerSession.participants &&
+    pokerSession.participants.map(toParticipantResponse),
   votingFinishTime:
     pokerSession.votingFinishTime && pokerSession.votingFinishTime.getTime(),
 });
