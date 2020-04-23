@@ -15,7 +15,7 @@ const StorySchema = mongoose.Schema({
   },
   pokerSession: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Story',
+    ref: 'PokerSession',
     required: true,
   },
 });

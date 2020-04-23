@@ -30,6 +30,11 @@ const PokerSessionSchema = mongoose.Schema({
     default: SESSION_STAGES.WAITING,
   },
   votingFinishTime: Date,
+  host: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Participant',
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('PokerSession', PokerSessionSchema);
