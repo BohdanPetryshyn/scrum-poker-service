@@ -14,7 +14,5 @@ const ParticipantSchema = mongoose.Schema({
 });
 
 const ParticipantModel = mongoose.model('Participant', ParticipantSchema);
-
 ParticipantModel.createCollection();
-
 module.exports = ParticipantModel;

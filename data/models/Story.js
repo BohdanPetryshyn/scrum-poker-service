@@ -20,4 +20,6 @@ const StorySchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Story', StorySchema);
+const StoryModel = mongoose.model('Story', StorySchema);
+StoryModel.createCollection();
+module.exports = StoryModel;

@@ -37,5 +37,7 @@ const PokerSessionSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('PokerSession', PokerSessionSchema);
+const PokerSessionModel = mongoose.model('PokerSession', PokerSessionSchema);
+PokerSessionModel.createCollection();
+module.exports = PokerSessionModel;
 module.exports.SESSION_STAGES = SESSION_STAGES;
