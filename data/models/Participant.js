@@ -11,6 +11,11 @@ const ParticipantSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'PokerSession',
   },
+  connected: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 });
 
 const ParticipantModel = mongoose.model('Participant', ParticipantSchema);

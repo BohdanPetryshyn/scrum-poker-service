@@ -3,6 +3,7 @@ const logger = require('../../utils/logger');
 
 const handleCreateStory = require('./handleCreateStory');
 const handleCreateSession = require('./handleCreateSession');
+const handleJoinSession = require('./handleJoinSession');
 
 const attachToServer = httpServer => {
   const serverSocket = io(httpServer);
@@ -13,11 +14,7 @@ const attachToServer = httpServer => {
       socket.on('CREATE_STORY', handleCreateStory({ serverSocket, sessionId }));
     });
 
-    socket.on('JOIN_SESSION', ({ sessionId }) => {
-      socket.join(sessionId);
-
-      logger.info(`New participant joined poker session ${sessionId}`);
-    });
+    socket.on('JOIN_SESSION', handleJoinSession({ socket }));
 
     logger.info('New socket connection.');
   });
