@@ -1,8 +1,8 @@
 const PokerSession = require('../../../data/models/PokerSession');
 const propagateErrors = require('../utils/propagateErrors');
 const ApiError = require('../utils/ApiError');
-const createPokerSession = require('../helpers/createPokerSession');
-const toPokerSessionResponse = require('../helpers/response/toPokerSessionResponse');
+const createPokerSession = require('../../../data/transaction/createPokerSessionn');
+const toPokerSessionResponse = require('../../../utils/response/toPokerSessionResponse');
 
 exports.createPokerSession = propagateErrors(async (req, res) => {
   const { topic, cardSchema, username } = req.body;

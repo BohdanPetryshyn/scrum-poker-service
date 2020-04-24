@@ -1,6 +1,6 @@
-const PokerSession = require('../../../data/models/PokerSession');
-const Participant = require('../../../data/models/Participant');
-const logger = require('../../../utils/logger');
+const PokerSession = require('../models/PokerSession');
+const Participant = require('../models/Participant');
+const logger = require('../../utils/logger');
 
 const createPokerSession = async (topic, cardSchema, hostUsername) => {
   let savedPokerSession = null;

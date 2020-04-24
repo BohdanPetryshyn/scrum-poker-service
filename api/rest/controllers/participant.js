@@ -1,7 +1,7 @@
 const Participant = require('../../../data/models/Participant');
 const PokerSession = require('../../../data/models/PokerSession');
 const propagateErrors = require('../utils/propagateErrors');
-const toPokerSessionResponse = require('../helpers/response/toPokerSessionResponse');
+const toPokerSessionResponse = require('../../../utils/response/toPokerSessionResponse');
 const ApiError = require('../utils/ApiError');
 
 exports.createParticipant = propagateErrors(async (req, res) => {

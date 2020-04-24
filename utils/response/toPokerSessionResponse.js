@@ -1,4 +1,4 @@
-const { getCardSchema } = require('../../../../utils/config/cardSchemas');
+const { getCardSchema } = require('../config/cardSchemas');
 const toParticipantResponse = require('./toParticipantResponse');
 
 const toPokerSessionResponse = pokerSession => ({
