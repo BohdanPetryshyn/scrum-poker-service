@@ -3,8 +3,8 @@ const PokerSession = require('../../data/models/PokerSession');
 const toPokerSessionResponse = require('../../utils/response/toPokerSessionResponse');
 const logger = require('../../utils/logger');
 
-const checkSessionExists = async sessionId => {
-  const sessionCount = PokerSession.count({ _id: sessionId });
+const sessionExists = async sessionId => {
+  const sessionCount = await PokerSession.count({ _id: sessionId });
   return sessionCount > 0;
 };
 
@@ -49,7 +49,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
     return socket.join(sessionId);
   }
 
-  if (!(await checkSessionExists(sessionId))) {
+  if (!(await sessionExists(sessionId))) {
     logger.info(
       `User ${username} tried to connect to unexisting session ${sessionId}.`
     );
