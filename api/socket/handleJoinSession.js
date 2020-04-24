@@ -1,6 +1,7 @@
 const Participant = require('../../data/models/Participant');
 const PokerSession = require('../../data/models/PokerSession');
 const toPokerSessionResponse = require('../../utils/response/toPokerSessionResponse');
+const errorAck = require('./errorAck');
 const logger = require('../../utils/logger');
 
 const sessionExists = async sessionId => {
@@ -36,8 +37,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
     logger.info(
       `User ${username} tried to connect to session ${sessionId}, but connected user in the session already exists.`
     );
-    ack(null);
-    return socket.disconnect(true);
+    ack(errorAck());
   }
 
   if (existingParticipant && !existingParticipant.connected) {
@@ -53,8 +53,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
     logger.info(
       `User ${username} tried to connect to unexisting session ${sessionId}.`
     );
-    ack(null);
-    return socket.disconnect(true);
+    ack(errorAck());
   }
 
   await createParticipant(username, sessionId);
