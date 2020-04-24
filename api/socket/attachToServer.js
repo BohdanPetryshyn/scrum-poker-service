@@ -10,9 +10,7 @@ const attachToServer = httpServer => {
 
   serverSocket.on('connection', socket => {
     socket.on('CREATE_SESSION', handleCreateSession({ socket }));
-    socket.on('CREATE_SESSION', ({ sessionId }) => {
-      socket.on('CREATE_STORY', handleCreateStory({ serverSocket, sessionId }));
-    });
+    socket.on('CREATE_STORY', handleCreateStory({ serverSocket }));
 
     socket.on('JOIN_SESSION', handleJoinSession({ socket }));
 

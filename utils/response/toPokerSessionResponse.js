@@ -10,6 +10,7 @@ const toPokerSessionResponse = pokerSession => ({
   participants:
     pokerSession.participants &&
     pokerSession.participants.map(toParticipantResponse),
+  votingStory: pokerSession.votingStory,
   votingFinishTime:
     pokerSession.votingFinishTime && pokerSession.votingFinishTime.getTime(),
 });

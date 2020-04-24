@@ -15,6 +15,11 @@ const PokerSessionSchema = mongoose.Schema({
     trim: true,
     maxlength: 100,
   },
+  host: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Participant',
+    required: true,
+  },
   cardSchema: {
     type: String,
     enum: CARD_SCHEMA_NAMES,
@@ -29,12 +34,11 @@ const PokerSessionSchema = mongoose.Schema({
     ],
     default: SESSION_STAGES.WAITING,
   },
-  votingFinishTime: Date,
-  host: {
+  votingStory: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Participant',
-    required: true,
+    ref: 'Story',
   },
+  votingFinishTime: Date,
 });
 
 PokerSessionSchema.virtual('participants', {

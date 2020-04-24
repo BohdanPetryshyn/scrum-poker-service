@@ -5,7 +5,7 @@ const errorAck = require('./errorAck');
 const logger = require('../../utils/logger');
 
 const sessionExists = async sessionId => {
-  const sessionCount = await PokerSession.count({ _id: sessionId });
+  const sessionCount = await PokerSession.countDocuments({ _id: sessionId });
   return sessionCount > 0;
 };
 
@@ -13,6 +13,7 @@ const getPopulatedSession = sessionId => {
   return PokerSession.findById(sessionId)
     .populate('host')
     .populate('participants')
+    .populate('votingStory')
     .exec();
 };
 

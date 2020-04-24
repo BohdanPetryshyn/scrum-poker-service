@@ -7,8 +7,12 @@ const logger = require('../../utils/logger');
 const getVotingFinishTime = () =>
   new Date(Date.now() + Number(VOTING_DURATION));
 
-const saveStory = async (story, sessionId) => {
-  const savedStory = await Story.create({ ...story, pokerSession: sessionId });
+const saveStory = async (summary, description, sessionId) => {
+  const savedStory = await Story.create({
+    summary,
+    description,
+    pokerSession: sessionId,
+  });
   logger.info(
     `Story "${savedStory.summary}" created in poker session ${sessionId}.`
   );
@@ -21,13 +25,14 @@ const toStoryResponse = story => ({
   description: story.description,
 });
 
-const updateSessionStage = async sessionId => {
+const setSessionVotingStory = async (sessionId, story) => {
   const votingFinishTime = getVotingFinishTime();
   const updatedSession = await PokerSession.findByIdAndUpdate(
     sessionId,
     {
       stage: SESSION_STAGES.VOTING,
       votingFinishTime,
+      votingStory: story,
     },
     { new: true }
   );
@@ -35,10 +40,11 @@ const updateSessionStage = async sessionId => {
   return updatedSession;
 };
 
-const handleCreateStory = ({ serverSocket, sessionId }) => async story => {
-  const savedStory = await saveStory(story, sessionId);
+const handleCreateStory = ({ serverSocket }) => async message => {
+  const { summary, description, sessionId } = message;
+  const savedStory = await saveStory(summary, description, sessionId);
 
-  const updatedSession = await updateSessionStage(sessionId);
+  const updatedSession = await setSessionVotingStory(sessionId, savedStory);
 
   serverSocket.to(sessionId).emit('STORY_CREATED', {
     votingFinishTime: updatedSession.votingFinishTime.getTime(),
