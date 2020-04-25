@@ -10,6 +10,8 @@ const sessionExists = async sessionId => {
   return sessionCount > 0;
 };
 
+const userConnected = user => user && user.connected;
+
 const getPopulatedSession = sessionId => {
   return PokerSession.findById(sessionId)
     .populate('host')
@@ -23,10 +25,17 @@ const getUser = (username, sessionId) => {
 };
 
 const reconnectExistingUser = async user => {
-  await User.update(user, { connected: true });
-  logger.info(
-    `User ${user.username} reconnected to session ${user.sessionId}.`
+  const updatedUser = await User.findByIdAndUpdate(
+    user['_id'],
+    {
+      connected: true,
+    },
+    { new: true }
   );
+  logger.info(
+    `User ${user.username} reconnected to session ${user.pokerSession}.`
+  );
+  return updatedUser;
 };
 
 const createUser = async (username, sessionId) => {
@@ -47,20 +56,16 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
 
   const existingUser = await getUser(username, sessionId);
 
-  if (existingUser && existingUser.connected) {
+  if (userConnected(existingUser)) {
     logger.info(
       `User ${username} tried to connect to session ${sessionId}, but connected user in the session already exists.`
     );
     return ack(errorAck());
   }
 
-  let user = null;
-  if (existingUser && !existingUser.connected) {
-    await reconnectExistingUser(existingUser);
-    user = existingUser;
-  } else {
-    user = await createUser(username, sessionId);
-  }
+  const user = existingUser
+    ? await reconnectExistingUser(existingUser)
+    : await createUser(username, sessionId);
 
   const updatedPokerSession = await getPopulatedSession(sessionId);
   socket.join(sessionId);
