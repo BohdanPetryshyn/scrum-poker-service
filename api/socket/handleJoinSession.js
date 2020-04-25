@@ -55,7 +55,6 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
   }
 
   const existingUser = await getUser(username, sessionId);
-
   if (userConnected(existingUser)) {
     logger.info(
       `User ${username} tried to connect to session ${sessionId}, but connected user in the session already exists.`
@@ -70,6 +69,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
   const updatedPokerSession = await getPopulatedSession(sessionId);
   socket.join(sessionId);
   socket.on('disconnect', handleDisconnection({ user }));
+  socket.to(sessionId).emit('USER_JOINED', user);
   return ack(toJoinResponse(updatedPokerSession, user));
 };
 
