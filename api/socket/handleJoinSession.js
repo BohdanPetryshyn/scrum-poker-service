@@ -1,7 +1,6 @@
 const Participant = require('../../data/models/Participant');
 const PokerSession = require('../../data/models/PokerSession');
-const toPokerSessionResponse = require('../../utils/response/toPokerSessionResponse');
-const toParticipantResponse = require('../../utils/response/toParticipantResponse');
+const toJoinResponse = require('../../utils/response/toJoinResponse');
 const errorAck = require('./errorAck');
 const logger = require('../../utils/logger');
 
@@ -30,11 +29,6 @@ const createParticipant = (username, sessionId) => {
   return Participant.create({ username, pokerSession: sessionId });
 };
 
-const joinResponse = (pokerSession, participant) => ({
-  pokerSession: toPokerSessionResponse(pokerSession),
-  user: toParticipantResponse(participant),
-});
-
 const handleJoinSession = ({ socket }) => async (message, ack) => {
   const { username, sessionId } = message;
 
@@ -52,7 +46,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
     logger.info(`Participant ${username} reconnected to session ${sessionId}.`);
 
     const updatedPokerSession = await getPopulatedSession(sessionId);
-    ack(joinResponse(updatedPokerSession, existingParticipant));
+    ack(toJoinResponse(updatedPokerSession, existingParticipant));
     return socket.join(sessionId);
   }
 
@@ -67,7 +61,7 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
   logger.info(`New participant ${username} joined session ${sessionId}.`);
 
   const updatedPokerSession = await getPopulatedSession(sessionId);
-  ack(joinResponse(updatedPokerSession, createdParticipant));
+  ack(toJoinResponse(updatedPokerSession, createdParticipant));
   return socket.join(sessionId);
 };
 

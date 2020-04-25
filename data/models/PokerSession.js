@@ -15,11 +15,6 @@ const PokerSessionSchema = mongoose.Schema({
     trim: true,
     maxlength: 100,
   },
-  host: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Participant',
-    required: true,
-  },
   cardSchema: {
     type: String,
     enum: CARD_SCHEMA_NAMES,

@@ -5,7 +5,6 @@ const toVotingResponse = require('./toVotingResponse');
 const toPokerSessionResponse = pokerSession => ({
   sessionId: pokerSession['_id'],
   topic: pokerSession.topic,
-  host: toParticipantResponse(pokerSession.host),
   cardSchema: getCardSchema(pokerSession.cardSchema),
   stage: pokerSession.stage,
   votings: pokerSession.participants

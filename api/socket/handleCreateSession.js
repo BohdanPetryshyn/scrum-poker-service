@@ -1,21 +1,23 @@
-const createPokerSession = require('../../data/transaction/createPokerSessionn');
-const toPokerSessionResponse = require('../../utils/response/toPokerSessionResponse');
+const PokerSession = require('../../data/models/PokerSession');
+const Participant = require('../../data/models/Participant');
+const toJoinResponse = require('../../utils/response/toJoinResponse');
 const logger = require('../../utils/logger');
 
 const handleCreateSession = ({ socket }) => async (message, ack) => {
   const { username, topic, cardSchema } = message;
 
-  const savedPokerSession = await createPokerSession(
-    topic,
-    cardSchema,
-    username
-  );
+  const savedSession = await PokerSession.create({ topic, cardSchema });
+  const sessionId = savedSession['_id'];
+  const savedParticipant = await Participant.create({
+    username,
+    isHost: true,
+    pokerSession: sessionId,
+  });
 
-  const sessionId = savedPokerSession['_id'];
   socket.join(sessionId);
   logger.info(`Host ${username} joined poker session ${sessionId}`);
 
-  ack(toPokerSessionResponse(savedPokerSession));
+  ack(toJoinResponse(savedSession, savedParticipant));
 };
 
 module.exports = handleCreateSession;
