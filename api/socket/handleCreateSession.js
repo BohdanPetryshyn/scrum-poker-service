@@ -14,6 +14,7 @@ const handleCreateSession = ({ socket }) => async (message, ack) => {
     isHost: true,
     pokerSession: sessionId,
   });
+  createdSession.users = [createdUser];
 
   socket.join(sessionId);
   socket.on('disconnect', handleDisconnection({ user: createdUser }));
