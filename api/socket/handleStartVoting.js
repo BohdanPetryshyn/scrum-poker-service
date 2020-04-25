@@ -23,7 +23,18 @@ const setVotingStage = async sessionId => {
 
 const getDefaultEstimates = async sessionId => {
   const sessionUsers = await User.find({ pokerSession: sessionId });
-  return sessionUsers.map(user => ({ user }));
+  return sessionUsers.filter(user => user.connected).map(user => ({ user }));
+};
+
+const createVoting = async (story, sessionId) => {
+  const createdVoting = await Voting.create({
+    story,
+    finishTime: getVotingFinishTime(),
+    pokerSession: sessionId,
+    estimates: await getDefaultEstimates(sessionId),
+  });
+  logger.info(`Voting created in session ${sessionId}.`);
+  return createdVoting;
 };
 
 const handleStartVoting = ({ serverSocket }) => async message => {
@@ -31,17 +42,11 @@ const handleStartVoting = ({ serverSocket }) => async message => {
 
   await setVotingStage(sessionId);
 
-  const savedVoting = await Voting.create({
-    story,
-    finishTime: getVotingFinishTime(),
-    pokerSession: sessionId,
-    estimates: await getDefaultEstimates(sessionId),
-  });
-  logger.info(`Voting ${savedVoting} created in session ${sessionId}.`);
+  const createdVoting = await createVoting(story, sessionId);
 
   serverSocket
     .to(sessionId)
-    .emit('VOTING_STARTED', toVotingResponse(savedVoting));
+    .emit('VOTING_STARTED', toVotingResponse(createdVoting));
 };
 
 module.exports = handleStartVoting;
