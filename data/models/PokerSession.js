@@ -35,8 +35,8 @@ const PokerSessionSchema = mongoose.Schema({
   },
 });
 
-PokerSessionSchema.virtual('participants', {
-  ref: 'Participant',
+PokerSessionSchema.virtual('users', {
+  ref: 'User',
   localField: '_id',
   foreignField: 'pokerSession',
   justOne: false,

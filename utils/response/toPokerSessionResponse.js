@@ -1,5 +1,5 @@
 const { getCardSchema } = require('../config/cardSchemas');
-const toParticipantResponse = require('./toParticipantResponse');
+const toUserResponse = require('./toUserResponse');
 const toVotingResponse = require('./toVotingResponse');
 
 const toPokerSessionResponse = pokerSession => ({
@@ -7,12 +7,10 @@ const toPokerSessionResponse = pokerSession => ({
   topic: pokerSession.topic,
   cardSchema: getCardSchema(pokerSession.cardSchema),
   stage: pokerSession.stage,
-  votings: pokerSession.participants
+  votings: pokerSession.votings
     ? pokerSession.votings.map(toVotingResponse)
     : [],
-  participants: pokerSession.participants
-    ? pokerSession.participants.map(toParticipantResponse)
-    : [],
+  users: pokerSession.users ? pokerSession.users.map(toUserResponse) : [],
 });
 
 module.exports = toPokerSessionResponse;

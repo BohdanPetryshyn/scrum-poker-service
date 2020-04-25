@@ -1,4 +1,4 @@
-const Participant = require('../../data/models/Participant');
+const User = require('../../data/models/User');
 const PokerSession = require('../../data/models/PokerSession');
 const toJoinResponse = require('../../utils/response/toJoinResponse');
 const errorAck = require('./errorAck');
@@ -13,25 +13,26 @@ const sessionExists = async sessionId => {
 const getPopulatedSession = sessionId => {
   return PokerSession.findById(sessionId)
     .populate('host')
-    .populate('participants')
+    .populate('users')
     .populate({ path: 'votings', options: { sort: { createdAt: -1 } } })
     .exec();
 };
 
-const getParticipant = (username, sessionId) => {
-  return Participant.findOne({ username, pokerSession: sessionId });
+const getUser = (username, sessionId) => {
+  return User.findOne({ username, pokerSession: sessionId });
 };
 
-const reconnectExistingParticipant = async participant => {
-  await Participant.update(participant, { connected: true });
+const reconnectExistingUser = async user => {
+  await User.update(user, { connected: true });
   logger.info(
-    `Participant ${participant.username} reconnected to session ${participant.sessionId}.`
+    `User ${user.username} reconnected to session ${user.sessionId}.`
   );
 };
 
-const createParticipant = async (username, sessionId) => {
-  await Participant.create({ username, pokerSession: sessionId });
-  logger.info(`New participant ${username} joined session ${sessionId}.`);
+const createUser = async (username, sessionId) => {
+  const createdUser = await User.create({ username, pokerSession: sessionId });
+  logger.info(`New user ${username} joined session ${sessionId}.`);
+  return createdUser;
 };
 
 const handleJoinSession = ({ socket }) => async (message, ack) => {
@@ -44,9 +45,9 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
     return ack(errorAck());
   }
 
-  const existingParticipant = await getParticipant(username, sessionId);
+  const existingUser = await getUser(username, sessionId);
 
-  if (existingParticipant && existingParticipant.connected) {
+  if (existingUser && existingUser.connected) {
     logger.info(
       `User ${username} tried to connect to session ${sessionId}, but connected user in the session already exists.`
     );
@@ -54,11 +55,11 @@ const handleJoinSession = ({ socket }) => async (message, ack) => {
   }
 
   let user = null;
-  if (existingParticipant && !existingParticipant.connected) {
-    await reconnectExistingParticipant(existingParticipant);
-    user = existingParticipant;
+  if (existingUser && !existingUser.connected) {
+    await reconnectExistingUser(existingUser);
+    user = existingUser;
   } else {
-    user = await createParticipant(username, sessionId);
+    user = await createUser(username, sessionId);
   }
 
   const updatedPokerSession = await getPopulatedSession(sessionId);

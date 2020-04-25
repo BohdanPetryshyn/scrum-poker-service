@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ParticipantSchema = mongoose.Schema({
+const User = mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -22,6 +22,6 @@ const ParticipantSchema = mongoose.Schema({
   },
 });
 
-const ParticipantModel = mongoose.model('Participant', ParticipantSchema);
-ParticipantModel.createCollection();
-module.exports = ParticipantModel;
+const UserModel = mongoose.model('User', User);
+UserModel.createCollection();
+module.exports = UserModel;

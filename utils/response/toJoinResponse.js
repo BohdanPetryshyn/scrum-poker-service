@@ -1,9 +1,9 @@
 const toPokerSessionResponse = require('./toPokerSessionResponse');
-const toParticipantResponse = require('./toParticipantResponse');
+const toUserResponse = require('./toUserResponse');
 
-const toJoinResponse = (pokerSession, participant) => ({
+const toJoinResponse = (pokerSession, user) => ({
   pokerSession: toPokerSessionResponse(pokerSession),
-  user: toParticipantResponse(participant),
+  user: toUserResponse(user),
 });
 
 module.exports = toJoinResponse;
