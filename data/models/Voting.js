@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 
 const Story = require('./Story');
+const Estimate = require('./Estimate');
 
 const VotingSchema = mongoose.Schema({
   story: {
     type: Story,
+    required: true,
+  },
+  estimates: {
+    type: [Estimate],
     required: true,
   },
   finishTime: {
