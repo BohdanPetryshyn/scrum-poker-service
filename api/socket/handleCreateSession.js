@@ -1,6 +1,7 @@
 const PokerSession = require('../../data/models/PokerSession');
 const Participant = require('../../data/models/Participant');
 const toJoinResponse = require('../../utils/response/toJoinResponse');
+const handleDisconnection = require('./handleDisconnection');
 const logger = require('../../utils/logger');
 
 const handleCreateSession = ({ socket }) => async (message, ack) => {
@@ -15,6 +16,7 @@ const handleCreateSession = ({ socket }) => async (message, ack) => {
   });
 
   socket.join(sessionId);
+  socket.on('disconnect', handleDisconnection({ user: savedParticipant }));
   logger.info(`Host ${username} joined poker session ${sessionId}`);
 
   ack(toJoinResponse(savedSession, savedParticipant));
