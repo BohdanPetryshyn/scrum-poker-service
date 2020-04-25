@@ -13,7 +13,7 @@ const getPopulatedSession = sessionId => {
   return PokerSession.findById(sessionId)
     .populate('host')
     .populate('participants')
-    .populate('votingStory')
+    .populate({ path: 'votings', options: { sort: { createdAt: -1 } } })
     .exec();
 };
 

@@ -34,15 +34,21 @@ const PokerSessionSchema = mongoose.Schema({
     ],
     default: SESSION_STAGES.WAITING,
   },
-  votingStory: {
+  voting: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Story',
+    ref: 'Voting',
   },
-  votingFinishTime: Date,
 });
 
 PokerSessionSchema.virtual('participants', {
   ref: 'Participant',
+  localField: '_id',
+  foreignField: 'pokerSession',
+  justOne: false,
+});
+
+PokerSessionSchema.virtual('votings', {
+  ref: 'Voting',
   localField: '_id',
   foreignField: 'pokerSession',
   justOne: false,
