@@ -7,6 +7,10 @@ const ParticipantSchema = mongoose.Schema({
     trim: true,
     maxlength: 30,
   },
+  isHost: {
+    type: Boolean,
+    default: false,
+  },
   pokerSession: {
     type: mongoose.Schema.ObjectId,
     ref: 'PokerSession',

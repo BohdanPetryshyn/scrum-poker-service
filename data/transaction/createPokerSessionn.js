@@ -9,6 +9,7 @@ const createPokerSession = async (topic, cardSchema, hostUsername) => {
   await session.withTransaction(async () => {
     const participant = await new Participant({
       username: hostUsername,
+      isHost: true,
     }).save({ session });
 
     const pokerSession = await new PokerSession({
