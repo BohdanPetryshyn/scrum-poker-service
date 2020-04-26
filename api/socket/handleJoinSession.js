@@ -53,7 +53,7 @@ const handleJoinSession = async (context, message, ack) => {
       `User ${username} tried to connect to unexisting session ${sessionId}.`
     );
     ack(errorAck());
-    return;
+    return context;
   }
 
   const existingUser = await getUser(username, sessionId);
@@ -62,7 +62,7 @@ const handleJoinSession = async (context, message, ack) => {
       `User ${username} tried to connect to session ${sessionId}, but connected user in the session already exists.`
     );
     ack(errorAck());
-    return;
+    return context;
   }
 
   const user = existingUser
@@ -71,9 +71,12 @@ const handleJoinSession = async (context, message, ack) => {
 
   const updatedPokerSession = await getPopulatedSession(sessionId);
   socket.join(sessionId);
-  socket.on('disconnect', handleDisconnection({ user }));
   socket.to(sessionId).emit('USER_JOINED', user);
   ack(toJoinResponse(updatedPokerSession, user));
+  return context.merge({
+    userId: user['_id'],
+    sessionId: updatedPokerSession['_id'],
+  });
 };
 
 module.exports = handleJoinSession;

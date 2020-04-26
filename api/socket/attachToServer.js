@@ -6,6 +6,7 @@ const createContextProvider = require('../../utils/createContextProvider');
 const handleStartVoting = require('./handleStartVoting');
 const handleCreateSession = require('./handleCreateSession');
 const handleJoinSession = require('./handleJoinSession');
+const handleDisconnection = require('./handleDisconnection');
 
 const attachToServer = httpServer => {
   const serverSocket = io(httpServer);
@@ -18,6 +19,7 @@ const attachToServer = httpServer => {
 
     socket.on('START_VOTING', withContext(handleStartVoting));
 
+    socket.on('disconnect', withContext(handleDisconnection));
     logger.info('New socket connection.');
   });
 };
