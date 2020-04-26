@@ -4,7 +4,8 @@ const toJoinResponse = require('../../utils/response/toJoinResponse');
 const handleDisconnection = require('./handleDisconnection');
 const logger = require('../../utils/logger');
 
-const handleCreateSession = ({ socket }) => async (message, ack) => {
+const handleCreateSession = async (context, message, ack) => {
+  const socket = context.get('socket');
   const { username, topic, cardSchema } = message;
 
   const createdSession = await PokerSession.create({ topic, cardSchema });

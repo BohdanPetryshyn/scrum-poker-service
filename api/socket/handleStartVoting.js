@@ -37,7 +37,8 @@ const createVoting = async (story, sessionId) => {
   return createdVoting;
 };
 
-const handleStartVoting = ({ serverSocket }) => async message => {
+const handleStartVoting = async (context, message) => {
+  const serverSocket = context.get('serverSocket');
   const { story, sessionId } = message;
 
   await setVotingStage(sessionId);

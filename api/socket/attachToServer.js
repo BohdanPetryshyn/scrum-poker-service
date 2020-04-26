@@ -1,6 +1,8 @@
 const io = require('socket.io');
+const { Map } = require('immutable');
 const logger = require('../../utils/logger');
 
+const createContextProvider = require('../../utils/createContextProvider');
 const handleStartVoting = require('./handleStartVoting');
 const handleCreateSession = require('./handleCreateSession');
 const handleJoinSession = require('./handleJoinSession');
@@ -9,10 +11,12 @@ const attachToServer = httpServer => {
   const serverSocket = io(httpServer);
 
   serverSocket.on('connection', socket => {
-    socket.on('CREATE_SESSION', handleCreateSession({ socket }));
-    socket.on('START_VOTING', handleStartVoting({ serverSocket }));
+    const withContext = createContextProvider(Map({ socket, serverSocket }));
 
-    socket.on('JOIN_SESSION', handleJoinSession({ socket }));
+    socket.on('CREATE_SESSION', withContext(handleCreateSession));
+    socket.on('JOIN_SESSION', withContext(handleJoinSession));
+
+    socket.on('START_VOTING', withContext(handleStartVoting));
 
     logger.info('New socket connection.');
   });
