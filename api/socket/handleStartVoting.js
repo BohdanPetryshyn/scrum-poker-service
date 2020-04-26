@@ -1,5 +1,4 @@
 const Voting = require('../../data/models/Voting');
-const User = require('../../data/models/User');
 const PokerSession = require('../../data/models/PokerSession');
 const { SESSION_STAGES } = require('../../data/models/PokerSession');
 const { VOTING_DURATION } = require('../../utils/config/environment');
@@ -17,19 +16,12 @@ const setCurrentVoting = async (sessionId, votingId) => {
   logger.info(`Session ${sessionId} is now in VOTING stage.`);
 };
 
-const getDefaultEstimates = async sessionId => {
-  const sessionUsers = await User.find({ pokerSession: sessionId });
-  return sessionUsers
-    .filter(user => user.connected)
-    .map(user => ({ user: user['_id'] }));
-};
-
 const createVoting = async (story, sessionId) => {
   const createdVoting = await Voting.create({
     story,
     finishTime: getVotingFinishTime(),
     pokerSession: sessionId,
-    estimates: await getDefaultEstimates(sessionId),
+    estimates: [],
   });
   logger.info(`Voting created in session ${sessionId}.`);
   return createdVoting;

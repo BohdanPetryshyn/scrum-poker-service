@@ -10,6 +10,8 @@ const toPokerSessionResponse = pokerSession => ({
   votings: pokerSession.votings
     ? pokerSession.votings.map(toVotingResponse)
     : [],
+  currentVoting:
+    pokerSession.currentVoting && toVotingResponse(pokerSession.currentVoting),
   users: pokerSession.users ? pokerSession.users.map(toUserResponse) : [],
 });
 

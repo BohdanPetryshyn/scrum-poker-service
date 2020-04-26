@@ -14,8 +14,9 @@ const userConnected = user => user && user.connected;
 const getPopulatedSession = sessionId => {
   return PokerSession.findById(sessionId)
     .populate('host')
-    .populate('users')
+    .populate({ path: 'users', match: { connected: true } })
     .populate({ path: 'votings', options: { sort: { createdAt: -1 } } })
+    .populate('currentVoting')
     .exec();
 };
 
