@@ -46,7 +46,7 @@ const handleSelectCard = async (context, message) => {
 
   serverSocket
     .to(sessionId)
-    .emit('CARD_SELECTED', toVotingResponse(updatedVoting));
+    .emit('USER_CARD_CHANGED', toVotingResponse(updatedVoting));
 };
 
 module.exports = handleSelectCard;
