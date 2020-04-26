@@ -11,7 +11,7 @@ const getVotingFinishTime = () =>
 
 const setCurrentVoting = async (sessionId, votingId) => {
   await PokerSession.findByIdAndUpdate(sessionId, {
-    state: SESSION_STAGES.VOTING,
+    stage: SESSION_STAGES.VOTING,
     currentVoting: votingId,
   });
   logger.info(`Session ${sessionId} is now in VOTING stage.`);
@@ -19,7 +19,9 @@ const setCurrentVoting = async (sessionId, votingId) => {
 
 const getDefaultEstimates = async sessionId => {
   const sessionUsers = await User.find({ pokerSession: sessionId });
-  return sessionUsers.filter(user => user.connected).map(user => ({ user }));
+  return sessionUsers
+    .filter(user => user.connected)
+    .map(user => ({ user: user['_id'] }));
 };
 
 const createVoting = async (story, sessionId) => {

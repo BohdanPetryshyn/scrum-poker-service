@@ -2,7 +2,6 @@ const User = require('../../data/models/User');
 const PokerSession = require('../../data/models/PokerSession');
 const toJoinResponse = require('../../utils/response/toJoinResponse');
 const errorAck = require('./errorAck');
-const handleDisconnection = require('./handleDisconnection');
 const logger = require('../../utils/logger');
 
 const sessionExists = async sessionId => {
