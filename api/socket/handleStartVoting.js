@@ -9,16 +9,12 @@ const logger = require('../../utils/logger');
 const getVotingFinishTime = () =>
   new Date(Date.now() + Number(VOTING_DURATION));
 
-const setVotingStage = async sessionId => {
-  const updatedSession = await PokerSession.findByIdAndUpdate(
-    sessionId,
-    {
-      stage: SESSION_STAGES.VOTING,
-    },
-    { new: true }
-  );
+const setCurrentVoting = async (sessionId, votingId) => {
+  await PokerSession.findByIdAndUpdate(sessionId, {
+    state: SESSION_STAGES.VOTING,
+    currentVoting: votingId,
+  });
   logger.info(`Session ${sessionId} is now in VOTING stage.`);
-  return updatedSession;
 };
 
 const getDefaultEstimates = async sessionId => {
@@ -42,9 +38,9 @@ const handleStartVoting = async (context, message) => {
   const sessionId = context.get('sessionId');
   const { story } = message;
 
-  await setVotingStage(sessionId);
-
   const createdVoting = await createVoting(story, sessionId);
+
+  await setCurrentVoting(sessionId, createdVoting['_id']);
 
   serverSocket
     .to(sessionId)

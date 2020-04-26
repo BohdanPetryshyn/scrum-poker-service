@@ -29,7 +29,7 @@ const PokerSessionSchema = mongoose.Schema({
     ],
     default: SESSION_STAGES.WAITING,
   },
-  voting: {
+  currentVoting: {
     type: mongoose.Schema.ObjectId,
     ref: 'Voting',
   },
