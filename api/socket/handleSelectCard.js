@@ -1,4 +1,5 @@
 const PokerSession = require('../../data/models/PokerSession');
+const { SESSION_STAGES } = require('../../data/models/PokerSession');
 const Voting = require('../../data/models/Voting');
 const toVotingResponse = require('../../utils/response/toVotingResponse');
 const logger = require('../../utils/logger');
@@ -53,6 +54,7 @@ const handleSelectCard = async (context, message) => {
     (await createEstimate(currentVotingId, userId, card));
 
   if (areAllUsersVoted(session.users, updatedVoting.estimates)) {
+    PokerSession.findByIdAndUpdate(sessionId, { stage: SESSION_STAGES.RESULT });
     serverSocket
       .to(sessionId)
       .emit('VOTING_ENDED', toVotingResponse(updatedVoting));
