@@ -28,13 +28,11 @@ const createEstimate = async (votingId, userId, card) => {
   return createdEstimate;
 };
 
-const areAllUsersVoted = (users, voting) => {
+const areAllUsersVoted = (users, estimates) => {
   return users
     .filter(user => user.connected)
     .every(user =>
-      voting.estimates.includes(
-        estimate => estimate.user['_id'] === user['_id']
-      )
+      estimates.find(estimate => estimate.user.equals(user['_id']))
     );
 };
 
@@ -54,7 +52,7 @@ const handleSelectCard = async (context, message) => {
     (await updateEstimate(currentVotingId, userId, card)) ||
     (await createEstimate(currentVotingId, userId, card));
 
-  if (areAllUsersVoted(updatedVoting)) {
+  if (areAllUsersVoted(session.users, updatedVoting.estimates)) {
     serverSocket
       .to(sessionId)
       .emit('VOTING_ENDED', toVotingResponse(updatedVoting));
