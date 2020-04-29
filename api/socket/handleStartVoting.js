@@ -27,6 +27,13 @@ const createVoting = async (story, sessionId) => {
   return createdVoting;
 };
 
+const scheduleVotingEnd = (votingId, serverSocket, sessionId) => {
+  setTimeout(async () => {
+    const voting = await Voting.findById(votingId);
+    serverSocket.to(sessionId).emit('VOTING_ENDED', toVotingResponse(voting));
+  }, VOTING_DURATION);
+};
+
 const handleStartVoting = async (context, message) => {
   const serverSocket = context.get('serverSocket');
   const sessionId = context.get('sessionId');
@@ -35,6 +42,8 @@ const handleStartVoting = async (context, message) => {
   const createdVoting = await createVoting(story, sessionId);
 
   await setCurrentVoting(sessionId, createdVoting['_id']);
+
+  scheduleVotingEnd(createdVoting['_id'], serverSocket, sessionId);
 
   serverSocket
     .to(sessionId)
