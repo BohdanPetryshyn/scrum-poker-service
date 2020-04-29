@@ -28,13 +28,23 @@ const createEstimate = async (votingId, userId, card) => {
   return createdEstimate;
 };
 
+const areAllUsersVoted = (users, voting) => {
+  return users
+    .filter(user => user.connected)
+    .every(user =>
+      voting.estimates.includes(
+        estimate => estimate.user['_id'] === user['_id']
+      )
+    );
+};
+
 const handleSelectCard = async (context, message) => {
   const sessionId = context.get('sessionId');
   const userId = context.get('userId');
   const serverSocket = context.get('serverSocket');
   const { card } = message;
 
-  const session = await PokerSession.findById(sessionId, 'currentVoting');
+  const session = await PokerSession.findById(sessionId).populate('users');
   const currentVotingId = session.currentVoting;
   if (!currentVotingId) {
     return;
@@ -43,6 +53,13 @@ const handleSelectCard = async (context, message) => {
   const updatedVoting =
     (await updateEstimate(currentVotingId, userId, card)) ||
     (await createEstimate(currentVotingId, userId, card));
+
+  if (areAllUsersVoted(updatedVoting)) {
+    serverSocket
+      .to(sessionId)
+      .emit('VOTING_ENDED', toVotingResponse(updatedVoting));
+    return;
+  }
 
   serverSocket
     .to(sessionId)
