@@ -35,6 +35,15 @@ const PokerSessionSchema = mongoose.Schema({
   },
 });
 
+PokerSessionSchema.statics.populateAll = function (session) {
+  return session
+    .populate('host')
+    .populate({ path: 'users', match: { connected: true } })
+    .populate({ path: 'votings', options: { sort: { createdAt: -1 } } })
+    .populate('currentVoting')
+    .exec();
+};
+
 PokerSessionSchema.virtual('users', {
   ref: 'User',
   localField: '_id',

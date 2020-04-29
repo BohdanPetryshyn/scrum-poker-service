@@ -8,6 +8,7 @@ const handleCreateSession = require('./handleCreateSession');
 const handleJoinSession = require('./handleJoinSession');
 const handleDisconnection = require('./handleDisconnection');
 const handleSelectCard = require('./handleSelectCard');
+const handleSetVotingResult = require('./handleSetVotingResult');
 
 const attachToServer = httpServer => {
   const serverSocket = io(httpServer);
@@ -20,6 +21,7 @@ const attachToServer = httpServer => {
 
     socket.on('START_VOTING', withContext(handleStartVoting));
     socket.on('SELECT_CARD', withContext(handleSelectCard));
+    socket.on('SET_VOTING_RESULT', withContext(handleSetVotingResult));
 
     socket.on('disconnect', withContext(handleDisconnection));
     logger.info('New socket connection.');

@@ -12,6 +12,7 @@ const VotingSchema = mongoose.Schema({
     type: [Estimate],
     required: true,
   },
+  resultCard: Number,
   finishTime: {
     type: Date,
     required: true,

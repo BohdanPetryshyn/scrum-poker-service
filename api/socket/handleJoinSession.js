@@ -11,15 +11,6 @@ const sessionExists = async sessionId => {
 
 const userConnected = user => user && user.connected;
 
-const getPopulatedSession = sessionId => {
-  return PokerSession.findById(sessionId)
-    .populate('host')
-    .populate({ path: 'users', match: { connected: true } })
-    .populate({ path: 'votings', options: { sort: { createdAt: -1 } } })
-    .populate('currentVoting')
-    .exec();
-};
-
 const getUser = (username, sessionId) => {
   return User.findOne({ username, pokerSession: sessionId });
 };
@@ -69,7 +60,9 @@ const handleJoinSession = async (context, message, ack) => {
     ? await reconnectExistingUser(existingUser)
     : await createUser(username, sessionId);
 
-  const updatedPokerSession = await getPopulatedSession(sessionId);
+  const updatedPokerSession = await PokerSession.populateAll(
+    PokerSession.findById(sessionId)
+  );
   socket.join(sessionId);
   socket.to(sessionId).emit('USER_JOINED', user);
   ack(toJoinResponse(updatedPokerSession, user));
