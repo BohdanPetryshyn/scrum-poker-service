@@ -13,10 +13,14 @@ const setVotingResult = async (votingId, resultCard) => {
 
 const updateSessionStage = async sessionId => {
   const updatedSession = await PokerSession.populateAll(
-    PokerSession.findByIdAndUpdate(sessionId, {
-      stage: SESSION_STAGES.WAITING,
-      currentVoting: null,
-    })
+    PokerSession.findByIdAndUpdate(
+      sessionId,
+      {
+        stage: SESSION_STAGES.WAITING,
+        currentVoting: null,
+      },
+      { new: true }
+    )
   );
   logger.info(`Session ${sessionId} is now in WAITING state`);
   return updatedSession;
