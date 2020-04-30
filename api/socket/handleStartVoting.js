@@ -28,7 +28,7 @@ const createVoting = async (story, sessionId) => {
 };
 
 const scheduleVotingEnd = (votingId, serverSocket, sessionId) => {
-  setTimeout(async () => {
+  return setTimeout(async () => {
     PokerSession.findByIdAndUpdate(sessionId, { stage: SESSION_STAGES.RESULT });
     const voting = await Voting.findById(votingId);
     serverSocket.to(sessionId).emit('VOTING_ENDED', toVotingResponse(voting));
@@ -44,11 +44,17 @@ const handleStartVoting = async (context, message) => {
 
   await setCurrentVoting(sessionId, createdVoting['_id']);
 
-  scheduleVotingEnd(createdVoting['_id'], serverSocket, sessionId);
+  const scheduledVotingEnd = scheduleVotingEnd(
+    createdVoting['_id'],
+    serverSocket,
+    sessionId
+  );
 
   serverSocket
     .to(sessionId)
     .emit('VOTING_STARTED', toVotingResponse(createdVoting));
+
+  return context.set('scheduledVotingEnd', scheduledVotingEnd);
 };
 
 module.exports = handleStartVoting;

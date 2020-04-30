@@ -55,6 +55,7 @@ const handleSelectCard = async (context, message) => {
 
   if (areAllUsersVoted(session.users, updatedVoting.estimates)) {
     PokerSession.findByIdAndUpdate(sessionId, { stage: SESSION_STAGES.RESULT });
+    clearTimeout(context.get('scheduledVotingEnd'));
     serverSocket
       .to(sessionId)
       .emit('VOTING_ENDED', toVotingResponse(updatedVoting));
